@@ -1,5 +1,5 @@
 # ASIO Networker
-A copy of One Loan Coders ASIO networker originally used in a game enigine.
+A copy of One Loan Coders ASIO networker originally used in the olc game enigine.
 
 This can be found here: https://github.com/OneLoneCoder/olcPixelGameEngine
 
