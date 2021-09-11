@@ -2,7 +2,7 @@
 	MMO Client/Server Framework using ASIO
 	"Happy Birthday Mrs Javidx9!" - javidx9
 
-	Videos: 
+	Videos:
 	Part #1: https://youtu.be/2hNdkYInj4g
 	Part #2: https://youtu.be/UbjxGvrDrbw
 
@@ -54,8 +54,16 @@
 
 */
 
-#pragma once
+#ifndef NETCLIENT
+  #define NETCLIENT
 #include "net_common.h"
+#include "net_connection.h"
+
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
 
 namespace olc
 {
@@ -65,7 +73,7 @@ namespace olc
 		class client_interface
 		{
 		public:
-			client_interface() 
+			client_interface()
 			{}
 
 			virtual ~client_interface()
@@ -85,8 +93,8 @@ namespace olc
 					asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(host, std::to_string(port));
 
 					// Create connection
-					m_connection = std::make_unique<connection<T>>(connection<T>::owner::client, m_context, asio::ip::tcp::socket(m_context), m_qMessagesIn);
-					
+					m_connection = make_unique<connection<T>>(connection<T>::owner::client, m_context, asio::ip::tcp::socket(m_context), m_qMessagesIn);
+
 					// Tell the connection object to connect to server
 					m_connection->ConnectToServer(endpoints);
 
@@ -111,7 +119,7 @@ namespace olc
 					m_connection->Disconnect();
 				}
 
-				// Either way, we're also done with the asio context...				
+				// Either way, we're also done with the asio context...
 				m_context.stop();
 				// ...and its thread
 				if (thrContext.joinable())
@@ -140,7 +148,7 @@ namespace olc
 
 			// Retrieve queue of messages from server
 			tsqueue<owned_message<T>>& Incoming()
-			{ 
+			{
 				return m_qMessagesIn;
 			}
 
@@ -151,10 +159,12 @@ namespace olc
 			std::thread thrContext;
 			// The client has a single instance of a "connection" object, which handles data transfer
 			std::unique_ptr<connection<T>> m_connection;
-			
+
 		private:
 			// This is the thread safe queue of incoming messages from server
 			tsqueue<owned_message<T>> m_qMessagesIn;
 		};
 	}
 }
+
+#endif
