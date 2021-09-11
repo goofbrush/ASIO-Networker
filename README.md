@@ -1,6 +1,7 @@
-# olc ASIO Networker
-A fork of One Loan Coders' game enigine to only include its networker.
+# ASIO Networker
+A copy of One Loan Coders ASIO networker originally used in a game enigine.
 
+This can be found here: https://github.com/OneLoneCoder/olcPixelGameEngine
 
 
 # License (OLC-3)
