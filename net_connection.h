@@ -349,7 +349,10 @@ namespace olc
 				ReadHeader();
 			}
 			uint64_t scramble(uint64_t nInput) {
-				throw "No handshake encryption defined, make your own unique scramble";
+				// throw "No handshake encryption defined, make your own unique scramble";
+				uint64_t out = nInput ^ 0xFE123A9876543210;
+                		out = (out & 0xF0F0F0F0F0F0F0) >> 4 | (out & 0xF0F0F0F0F0F0F0) << 4;
+                		return out ^ 0x0123456789ABCDEF;
 			}
 
 			void WriteValidation() {
